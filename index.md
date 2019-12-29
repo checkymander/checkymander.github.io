@@ -1,2 +1,2 @@
 title: Welcome!
-permalink: /index.html
+permalink: /
