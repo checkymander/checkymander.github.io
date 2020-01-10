@@ -13,6 +13,12 @@ tags:
 To add new posts, simply add a file in the `_posts` directory that follows the convention `YYYY-MM-DD-name-of-post.ext` and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.
 
 
+This theme supports **link posts**, made famous by John Gruber. To use, just add `link: http://url-you-want-linked` to the post's YAML front matter and you're done.
+
+> And this is how a quote looks.
+
+Some [link](#) can also be shown.
+
 
 > This is a quotation that will show up as a quotation on the site.
 
