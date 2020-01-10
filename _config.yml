@@ -2,6 +2,18 @@
 remote_theme: "mmistakes/minimal-mistakes@4.17.2"
 title: Checkymanders blog
 description: Yet another InfoSec blog
+lsi: false
+safe: true
+source: /
+incremental: false
+highlighter: rouge
+gist:
+  noscript: false
+kramdown:
+  math_engine: mathjax
+  syntax_highlighter: rouge
+
+
 
 plugins:
   - jekyll-paginate
