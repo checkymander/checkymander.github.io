@@ -2,3 +2,10 @@
 remote_theme: "mmistakes/minimal-mistakes@4.17.2"
 title: Checkymanders blog
 description: Yet another InfoSec blog
+
+plugins:
+  - jekyll-paginate
+  - jekyll-sitemap
+  - jekyll-gist
+  - jekyll-feed
+  - jekyll-include-cache
