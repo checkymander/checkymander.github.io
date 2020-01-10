@@ -1,11 +1,17 @@
 ---
-title: "Post: Quote"
+title: "Post Title Goes Here"
 categories:
-  - Blog
+  - Category1
+  - Category2
+  - Category3
 tags:
-  - Post Formats
-  - quote
+  - Tag1
+  - Tag2
+  - Tag3
 ---
+
+
+> This is a quotation that will show up as a quotation on the site.
 
 > Only one thing is impossible for God: To find any sense in any copyright law on the planet.
   
