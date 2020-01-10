@@ -1,3 +1,4 @@
-theme: jekyll-theme-slate
+#theme: jekyll-theme-slate
+remote_theme: "mmistakes/minimal-mistakes@4.17.2"
 title: Checkymanders blog
 description: Yet another InfoSec blog
