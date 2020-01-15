@@ -15,4 +15,4 @@ It happens constantly, you gain access to a box, you do your initial checks (am 
 
 Preventing these situations, and making optimizing your worfklow are reasons why it's important for C2 platforms and Red Teamers to have ways to automate their common workflows. Cobalt Strike does this well with its Aggressor language, allowing code execution upon initial beacons and adding custom commands to your UI. But what about other C2 providers?
 
-In this Blog Post I'm going to discuss a tool I've been working on named Forerunner. This is a tool that makes extensive use of the Covenant API in order to allow operators to hook into Grunt Events, and perform actions based on the event that's returned.
+In this Blog Post I'm going to discuss a tool I've been working on called Forerunner. This is a tool that makes extensive use of the Covenant API in order to allow operators to hook into Grunt Events, and perform actions based on the event that's returned.
