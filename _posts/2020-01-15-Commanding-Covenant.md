@@ -15,4 +15,15 @@ It happens constantly, you gain access to a box, you do your initial checks (am 
 
 Preventing these situations, and making optimizing your worfklow are reasons why it's important for C2 platforms and Red Teamers to have ways to automate their common workflows. Cobalt Strike does this well with its Aggressor language, allowing code execution upon initial beacons and adding custom commands to your UI. But what about other C2 providers?
 
-In this Blog Post I'm going to discuss a tool I've been working on called Forerunner. This is a tool that makes extensive use of the Covenant API in order to allow operators to hook into Grunt Events, and perform actions based on the event that's returned.
+In this Blog Post I'm going to discuss a tool I've been working on called Forerunner. This application makes extensive use of the Covenant API in order to allow operators to hook into Grunt Events, and perform actions based on the event that's returned. It can also be used as an example of how to interact with the Covenant API for implementation into other custom tools.
+
+# Installation
+
+You can download a pre-built version of Forerunner from Github at https://github.com/checkymander/Forerunner/releases. This will be the Self-Contained and Trimmed Executable for Windows x64.
+
+If you'd prefer to build it yourself perform the following steps:
+1.) Download the most recent version of Forerunner from https://github.com/checkymander/Forerunner
+2.) Install [https://dotnet.microsoft.com/download/dotnet-core/3.1](Dotnet Core 3.1)
+3.) Open the Forerunner folder in cmd.exe
+4.) Run the command `dotnet publish -r <os type> -c Release`
+  - Optional add `/p:PublishSingleFile=true` and `/p:PublishTrimmed=true` if you'd like it to be a self-contained executable.
