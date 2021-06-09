@@ -63,7 +63,7 @@ hmm...not quite.
 
 ## Decrypting the Credentials
 
-Looking at the [documentation](https://helpcenter.veeam.com/docs/agentforwindows/configurator/encryption.html?ver=50), we can see the user credentials get encrypted before theyy're stored into the database. Unfortunately, it doesn't show us the type of encryption that is being used to protect these passwords.
+Looking at the [documentation](https://helpcenter.veeam.com/docs/agentforwindows/configurator/encryption.html?ver=50), we can see the user credentials get encrypted before they're stored into the database. Unfortunately, it doesn't show us the type of encryption that is being used to protect these passwords.
 
 After some further googling, I came across the following KB article [KB2327](https://www.veeam.com/kb2327) which states:
 
