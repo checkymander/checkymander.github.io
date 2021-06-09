@@ -80,7 +80,7 @@ For anyone not already familiar with DPAPI refer to [this](https://www.harmj0y.n
 
 The quick and dirty is, DPAPI is a set of crypto functions that try to make it easier to handle key management for encrypting and decrypting data. It's commonly used by applications such as Google Chrome to securely store saved website logins on disk, and in this case VEEAM Backup & Replication also uses it to protect credentials in the database.
 
-Now that we know how it's encrypted, we can figure out how to decrypt it. Luckily for us there are two tools that have save us the effort from having to implement the code ourselves. I'll show you how to decrypt this data using both tools.
+Now that we know how it's encrypted, we can figure out how to decrypt it. Luckily for us there are two tools that save us the effort from having to implement the code ourselves. I'll show you how to decrypt this data using both tools.
 
 ### Mimikatz
 
@@ -130,7 +130,7 @@ You should see output like the following:
 
 ![image](https://user-images.githubusercontent.com/26147220/121405810-7a71ff00-c92b-11eb-9731-19737be585a7.png)
 
-In both cases the hex value that's returned is the same value and can be decrypted to our password of `Sup3rS3cr3t!`j
+In both cases the hex value that's returned is the same value and can be decrypted to our password of `Sup3rS3cr3t!`
 
 ## Prevention
 
