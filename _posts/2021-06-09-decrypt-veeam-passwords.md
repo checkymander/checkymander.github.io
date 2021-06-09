@@ -107,7 +107,7 @@ namespace txt2bin
 }
 ```
 
-Take the outputed payload.bin and place it on disk. The following steps will need to be executed on the VEEAM server directly unless you export the DPAPI keys first. Additionally, you will neeed to bee a local administrator on the machine in order to read the machine API key, but likely if you have access to the VEEAM dattabase, you already are. 
+Take the outputed payload.bin and place it on disk. If you've already exported the DPAPI keys from the backup server, all of these steps can be performed offline providing the apppropriate additional flags. If not, the commands will need to be run in the context of a local administrator on the VEEAM server itself.
 
 Run the following command to decrypt the DPAPI blob:
 
