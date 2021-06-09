@@ -122,7 +122,7 @@ This should be successful, and you will seee the data field with some hex after 
 
 ### SharpDPAPI
 
-SharpDPAPI is a little bit easier to decrypt the password as we can provide the base64 blob to it directly. In addition, depending on your c2 of choice, it's pretty much guaranteed that you'll be able to execute .NET executables in memory. To decrypt the password using SharpDPAPI run the following command:
+SharpDPAPI is a little bit easier to use to decrypt the password as we can provide the base64 blob to it directly. In addition, depending on your c2 of choice, it's pretty much guaranteed that you'll be able to execute .NET executables in memory. To decrypt the password using SharpDPAPI run the following command:
 
 `SharpDPAPI.exe blob /target:"base64blobgoeshere" /unprotect`
 
