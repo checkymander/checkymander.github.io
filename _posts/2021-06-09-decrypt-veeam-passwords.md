@@ -86,7 +86,7 @@ Now that we know how it's encrypted, we can figure out how to decrypt it. Luckil
 
 The first is ol' faithful, Mimikatz.
 
-First we need to convert the base64 blob into a binary file that can be useeud by mimkatz. This can be done pretty easily in C# using the following code:
+First we need to convert the base64 blob into a binary file that can be used by mimkatz. This can be done pretty easily in C# using the following code:
 
 ```
 using System;
