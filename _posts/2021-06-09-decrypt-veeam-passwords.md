@@ -41,7 +41,7 @@ When installing VEEAM Backup & Replication, you'll be asked to select a Microsof
 
 ![image](https://user-images.githubusercontent.com/26147220/121400943-2b759b00-c926-11eb-9fe7-f806a0dffc62.png)
 
-Hitting "Next" will attempt to conenct to the database to validate connnectivity and perform other checks, so avoid clicking that. This provides us everything we need to connect to the database, the location, the authentication type, and the instance name.
+Hitting "Next" will attempt to connect to the database to validate connnectivity and perform other checks, so avoid clicking that. This provides us everything we need to connect to the database, the location, the authentication type, and the instance name.
 
 With this information we can use a tool such as Sql Server Management Studio to connect to the databse to view configuration information. Open up SSMSS and enter in the required information.
 
