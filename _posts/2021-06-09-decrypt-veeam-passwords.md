@@ -16,7 +16,7 @@ tags:
 VEEAM is an enterprise level backup solution that allows administrators to perform backups and restorations of assets such as Cloud Devices, Virtual Machines, and Physical Hosts. It is meant to be easy to setup, and flexible enough for any environment. While also providing reliable backups and helping support resiliency from ransomware attacks.
 
 ## So what?
-Backup Solutions provide a lot of valuable information to Red Teamers and Penetration Testers, allowing them access to data they otherwise wouldn't have permission to view, and potentially information that could allow them to expand further throughout the network. Back in April of 2020 Brett DeWall (@xbadbiddyx) put out a post called [From VEEAM to Domain Administrator](https://www.whiteoaksecurity.com/2020-4-14-from-veeam-to-domain-administrator/) which talks about how VEEAM backups of Domain Controllers can be used to leverage DA access in the environment. But what about cases where the VEEAM solution isn't doing DC backups or the SMB share isn't directly available to you?
+Backup Solutions provide a lot of valuable information to Red Teamers and Penetration Testers, allowing them access to data they otherwise wouldn't have permission to view, and potentially information that could allow them to expand further throughout the network. Back in April of 2020 Brett DeWall ([@xbadbiddyx](https://twitter.com/xbadbiddyx)) put out a post called [From VEEAM to Domain Administrator](https://www.whiteoaksecurity.com/2020-4-14-from-veeam-to-domain-administrator/) which talks about how VEEAM backups of Domain Controllers can be used to leverage DA access in the environment. But what about cases where the VEEAM solution isn't doing DC backups or the SMB share isn't directly available to you?
 
 In order to facilitate performing these backups, these backup solutions need some type of privileged access over the hosts they're connecting to. VEEAM Backup & Replication makes this easy by providing a Credentials Manager, which maintains a list of credentials records that you can use to connect to components in the backup infrastructure. This credentials manager can store the following items:
 - Domain Credentials
@@ -43,7 +43,7 @@ When installing VEEAM Backup & Replication, you'll be asked to select a Microsof
 
 Hitting "Next" will attempt to connect to the database to validate connnectivity and perform other checks, so avoid clicking that. This provides us everything we need to connect to the database, the location, the authentication type, and the instance name.
 
-With this information we can use a tool such as Sql Server Management Studio to connect to the databse to view configuration information. Open up SSMSS and enter in the required information.
+With this information we can use a tool such as SQL Server Management Studio to connect to the databse to view configuration information. Open up SSMSS and enter in the required information.
 
 ![image](https://user-images.githubusercontent.com/26147220/121401612-e56d0700-c926-11eb-8c19-33029d4c1c98.png)
 
@@ -76,7 +76,7 @@ I know this one, DPAPI!
 
 ![image](https://media.giphy.com/media/6JvWR1rDbseeQ/giphy.gif)
 
-For anyone not already familiar with DPAPI refer to [this](https://www.harmj0y.net/blog/redteaming/offensive-encrypted-data-storage-dpapi-edition/) post by [Will Shroeder aka Harmj0y](https://twitter.com/harmj0y)
+For anyone not already familiar with DPAPI refer to [this](https://www.harmj0y.net/blog/redteaming/offensive-encrypted-data-storage-dpapi-edition/) post by Will Shroeder ([Harmj0y](https://twitter.com/harmj0y))
 
 The quick and dirty is, DPAPI is a set of crypto functions that try to make it easier to handle key management for encrypting and decrypting data. It's commonly used by applications such as Google Chrome to securely store saved website logins on disk, and in this case VEEAM Backup & Replication also uses it to protect credentials in the database.
 
@@ -134,7 +134,7 @@ In both cases the hex value that's returned is the same value and can be decrypt
 
 ## Prevention
 
-As this is intended functionality and is required for the VEEAM backup server to work, the main protection against this technique is to limit the amount of people who have access to the VEEAM Backup Server. In addition, ensure proper access controls are enforced on the MSSQL databse itself to prevent a users from reading the protected data in the first place.
+As this is intended functionality and is required for the VEEAM backup server to work, the main protection against this technique is to limit the amount of people who have access to the VEEAM Backup Server. In addition, ensure proper access controls are enforced on the MSSQL databse itself to prevent users from reading the protected data in the first place.
 
 ## Conclusion
 
