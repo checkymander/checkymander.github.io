@@ -31,7 +31,7 @@ Depending on your environment this could be a gold mine of privileged accounts, 
 
 ![image](https://user-images.githubusercontent.com/26147220/121399946-fc125e80-c924-11eb-8562-207e7a331fbc.png)
 
-In this post, I'm going to go over how we can gain access to these underlying credential information in order to leverage further attacks against our target.
+In this post, I'm going to go over how we can gain access to this underlying credential information in order to leverage further attacks against our target.
 
 ## Finding The Credentials
 
