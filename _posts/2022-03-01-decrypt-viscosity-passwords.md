@@ -138,4 +138,4 @@ I got lucky and found it pretty quickly, After running `strings.exe` on the `Vis
 
 ![image](/assets/images/viscosity/strings.png)
 
-After confirming with a few coworkers, it seems like this entropy string is hardcoded inside the executable itself! So at least between the same versions of Viscosity you'll be able to use the string `asdwdfo2 j3805cnytq35[0x`` u32tx48y n3-9z4` as your salt. This may or may not change between versions, but at least we now have a way of recovering the value without too much fuss.
+After confirming with a few coworkers, it seems like this entropy string is hardcoded inside the executable itself! So at least between the same versions of Viscosity you'll be able to use the string ``asdwdfo2 j3805cnytq35[0x` u32tx48y n3-9z4`` as your salt. This may or may not change between versions, but at least we now have a way of recovering the value without too much fuss.
