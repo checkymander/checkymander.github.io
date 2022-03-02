@@ -116,7 +116,7 @@ Since the DATA_BLOB struct requests a pointer to the data and not the data itsel
 
 So you can directly copy `00000183`8c54eae8` or reverse it into `0x000001838c54eae8` and use it within the `db` command to view the section of memory that pointer is pointing to:
 
-![image](/assets/images/viscosity/memory_formats.png)
+![image](/assets/images/viscosity/memory-formats.png)
 
 Now we have access to a memory location containing some data that looks right! Looking back at the length property of the DATA_BLOB we were looking at indicates it has a length of `29` but we need to remember that this is a hex value, so in decimal it actually is `41`, luckily for us, that's exactly how long this string is!
 
