@@ -13,7 +13,9 @@ tags:
 
 ## Recovering saved Viscosity credentials
 
-During a red team op, retrieving plain text credentials is an integral part of ensuring operational success. Plaintext credentials allow you more flexibility in the kinds of attacks you're able to do, and depending on what credentials are stored, can give you additional access to an environment. Keylogging is one of the most reliable ways, however it can take a while, and you potentially miss the user typing their password in, or they might not even have to type it, and rely on it being remembered or a password manager. Because of this, I'm always looking for new places that store credentials, and how they can be abused. One day while doing some maintenance our infrastructure, it occurred to me that Viscosity allows users to save credentials so that they don't have to be entered every time they connect. It piqued my interest, and I decided I wanted to learn a little bit about how those credentials are stored, and whether they can be recovered or not.
+During a red team op, retrieving plain text credentials is an integral part of ensuring operational success. Plaintext credentials allow you more flexibility in the kinds of attacks you're able to do, and depending on what credentials are stored, can give you additional access to an environment. 
+
+Keylogging is a very reliable way to recover credentials, however it can take a while, and the user may not even type their password in, they may rely on it being remembered by their browser or a password manager. Because of this, I'm always looking for new places that store credentials, and how they can be abused. One day while doing some maintenance our infrastructure, it occurred to me that Viscosity allows users to save credentials so that they don't have to be entered every time they connect. It piqued my interest, and I decided I wanted to learn a little bit about how those credentials are stored, and whether they can be recovered or not.
 
 Note: I think it's important to show the process of how I figured it out, but if you're only interested in the technical details skip to the section labeled "Diving Deeper"
 
@@ -59,7 +61,7 @@ Darn. That's definitely not a password. After a bit of back and forth with @suba
 
 @subat0mik pointed me to an article created by Quentin Kaiser (@QKaiser) detailing his process of reversing the pulse secure client credentials store which also contained additional entropy. The article is a great read albeit the formatting has broken slightly and can be found [here](https://www.gremwell.com/blog/reversing_pulse_secure_client_credentials_store). First I downloaded WinDBG from the Windows Store, while not the nicest looking application, it was good enough. With a bit of help (Thanks @willmonk!) it will be able to help me accomplish what I needed to.
 
-Since I already knew what function was being called to encrypt and decrypt the data I went ahead and set my breakpoint with the `bp Crypt32!CryptUnprotectData` I then entered the `g` command in order to allow the process to continue execution:
+Since I already knew what function was being called to encrypt and decrypt the data I went ahead and set my breakpoint with `bp Crypt32!CryptUnprotectData` I then entered the `g` command in order to allow the process to continue execution:
 
 ![image](/assets/images/viscosity/setting-breakpoints.png)
 
