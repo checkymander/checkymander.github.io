@@ -11,7 +11,7 @@ tags:
   - Privilege Escalation
 ---
 
-Recovering saved Viscosity credentials
+## Recovering saved Viscosity credentials
 
 During a red team op, retrieving plain text credentials is an integral part of ensuring operational success. Plaintext credentials allow you more flexibility in the kinds of attacks you're able to do, and depending on what credentials are stored, can give you additional access to an environment. Keylogging is one of the most reliable ways, however it can take a while, and you potentially miss the user typing their password in, or they might not even have to type it, and rely on it being remembered or a password manager. Because of this, I'm always looking for new places that store credentials, and how they can be abused. One day while doing some maintenance our infrastructure, it occurred to me that Viscosity allows users to save credentials so that they don't have to be entered every time they connect. It piqued my interest, and I decided I wanted to learn a little bit about how those credentials are stored, and whether they can be recovered or not.
 
@@ -19,15 +19,15 @@ Note: I think it's important to show the process of how I figured it out, but if
 
 ## How it works
 
-After a quick google search, I came across this <https://www.sparklabs.com/forum/viewtopic.php?t=1204> forum post which identified the location for saved credentials is a file called `LoginInfo.xml` stored in `%AppData%\Viscosity\`. From here, I decided to take a look at the XML file, hoping that it would be in a format that was easily recoverable or even plaintext, the file looks like this:
+After a quick google search, I came across this [this](https://www.sparklabs.com/forum/viewtopic.php?t=1204) forum post which identified the location for saved credentials is a file called `LoginInfo.xml` stored in `%AppData%\Viscosity\`. From here, I decided to take a look at the XML file, hoping that it would be in a format that was easily recoverable or even plaintext, the file looks like this:
 
-<screenshot of redacted xml>
+---placeholderplaceholderplaceholder---
 
-It turns out it's a plist containing keys for each connection with each connection containing subkeys that identify the saved Username and Password for the user. I saw Base64 encoding, however it looked too long to just be the Base64 encoded username/password. A quick decode of the string confirmed my suspicions that it wasn't going to be that easy. Before I dove too deep, I decided to look up to see if anyone had already documented password recovery for these files. Unfortunately no such tool existed, and according to this forum post <https://www.sparklabs.com/forum/viewtopic.php?t=2533> there is no way to recover the saved credentials. Well that's no fun, so I decided to set out and see if it was actually possible to recover these credentials. 
+It turns out it's a plist containing keys for each connection with each connection containing subkeys that identify the saved Username and Password for the user. I saw Base64 encoding, however it looked too long to just be the Base64 encoded username/password. A quick decode of the string confirmed my suspicions that it wasn't going to be that easy. Before I dove too deep, I decided to look up to see if anyone had already documented password recovery for these files. Unfortunately no such tool existed, and according to [this](https://www.sparklabs.com/forum/viewtopic.php?t=2533) forum post there is no way to recover the saved credentials. Well that's no fun, so I decided to set out and see if it was actually possible to recover these credentials. 
 
-First I needed to figure out how they're protecting these credentials. I went back and did some more googling and came across this post<https://www.sparklabs.com/forum/viewtopic.php?t=1995>. The developer indicated that by design LoginInfo.xml files cannot be moved from one machine to another, which indicated that something on the machine is handling the encryption portion. Anyone who has read my blog before, can get an idea of where this is going, DPAPI! 
+First I needed to figure out how they're protecting these credentials. I went back and did some more googling and came across [this](https://www.sparklabs.com/forum/viewtopic.php?t=1995). The developer indicated that by design LoginInfo.xml files cannot be moved from one machine to another, which indicated that something on the machine is handling the encryption portion. Anyone who has read my blog before, can get an idea of where this is going, DPAPI! 
 
-The nice thing about DPAPI blobs, is they're pretty easy to identify. DPAPI blobs begin with a standard set of bytes that indicate what it is, these bytes are `01 00 00 00 D0 8C 9D DF 01 15 D1 11 8C 7A 00 C0 4F C2 97 EB`. A lot of applications like to store these blobs in Base64 encoded format so you'll have to decode it to a byte array first, and then check the array. If we take the code from my previous blog post about decrypting VEEAM passwords <link> and input one of our found strings in it, we'll get a password.bin file. From here, we can take that password.bin file and load it into a hex editor and we'll see something neat:
+The nice thing about DPAPI blobs, is they're pretty easy to identify. DPAPI blobs begin with a standard set of bytes that indicate what it is, these bytes are `01 00 00 00 D0 8C 9D DF 01 15 D1 11 8C 7A 00 C0 4F C2 97 EB`. A lot of applications like to store these blobs in Base64 encoded format so you'll have to decode it to a byte array first, and then check the array. If we take the code from my previous blog post about decrypting VEEAM passwords and input one of our found strings in it, we'll get a password.bin file. From here, we can take that password.bin file and load it into a hex editor and we'll see something neat:
 
 ![image](/assets/images/viscosity/DPAPI-Bytes.png)
 
@@ -57,7 +57,7 @@ Darn. That's definitely not a password. After a bit of back and forth with @suba
 
 ## Diving deeper
 
-@subat0mik pointed me to an article created by Quentin Kaiser (@QKaiser) detailing his process of reversing the pulse secure client credentials store which also contained additional entropy. The article is a great read albeit the formatting has broken slightly and can be found here <https://www.gremwell.com/blog/reversing_pulse_secure_client_credentials_store>. First I downloaded WinDBG from the Windows Store, while not the nicest looking application, it was good enough. With a bit of help (Thanks @willmonk!) it will be able to help me accomplish what I needed to.
+@subat0mik pointed me to an article created by Quentin Kaiser (@QKaiser) detailing his process of reversing the pulse secure client credentials store which also contained additional entropy. The article is a great read albeit the formatting has broken slightly and can be found [here](https://www.gremwell.com/blog/reversing_pulse_secure_client_credentials_store). First I downloaded WinDBG from the Windows Store, while not the nicest looking application, it was good enough. With a bit of help (Thanks @willmonk!) it will be able to help me accomplish what I needed to.
 
 Since I already knew what function was being called to encrypt and decrypt the data I went ahead and set my breakpoint with the `bp Crypt32!CryptUnprotectData` I then entered the `g` command in order to allow the process to continue execution:
 
@@ -69,7 +69,7 @@ Next, I connected to the VPN that had my credentials saved in Viscosity. It was 
 
 ![image](/assets/images/viscosity/breakpoint-hit.png)
 
-There are a few quick things you need to understand about function calls in Windows before I continue. When a function is called and parameters are passed to a function, where these parameters are stored is dependant on where in the order the parameters are. This information can be found here<https://docs.microsoft.com/en-us/cpp/build/x64-calling-convention?view=msvc-170#parameter-passing> on MSDN. However the quick version is, the first four parameters are stored in CPU registers, and anything beyond that gets pushed to the stack. So if we have a function like
+There are a few quick things you need to understand about function calls in Windows before I continue. When a function is called and parameters are passed to a function, where these parameters are stored is dependant on where in the order the parameters are. This information can be found [here](https://docs.microsoft.com/en-us/cpp/build/x64-calling-convention?view=msvc-170#parameter-passing) on MSDN. However the quick version is, the first four parameters are stored in CPU registers, and anything beyond that gets pushed to the stack. So if we have a function like
 
 ```
 AddNumbers(int num1, int num2, int num3, int num4, int num5, int num6)
@@ -106,7 +106,7 @@ The thing we don't already know out of those parameters is *pOptionalEntropy whi
 
 ![image](/assets/images/viscosity/windbg-registers.png)
 
-So in our case, we can see that the register `R8` has the value `0x00000046e37fe758`. Since the CryptUnprotectData function is looking for a pointer to a DATA_BLOB struct, we take a look at what we can find at that memory location with the command `db 0x00000046e37fe758` or even easier `db @r8`. To understand what we're looking at we're going to have to get a quick idea of what the DATA_BLOB struct looks like. The documentation can be found here<https://docs.microsoft.com/en-us/previous-versions/windows/desktop/legacy/aa381414(v=vs.85)> but it's essentially a small struct with two properties. The first is how big the data is, and the second is a pointer to the data. So in the screenshot below, I've separated the two properties so you can see it easier:
+So in our case, we can see that the register `R8` has the value `0x00000046e37fe758`. Since the CryptUnprotectData function is looking for a pointer to a DATA_BLOB struct, we take a look at what we can find at that memory location with the command `db 0x00000046e37fe758` or even easier `db @r8`. To understand what we're looking at we're going to have to get a quick idea of what the DATA_BLOB struct looks like. The documentation can be found [here](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/legacy/aa381414(v=vs.85)) but it's essentially a small struct with two properties. The first is how big the data is, and the second is a pointer to the data. So in the screenshot below, I've separated the two properties so you can see it easier:
 
 ![image](/assets/images/viscosity/db-758.png)
 
@@ -124,7 +124,7 @@ Now we have access to a memory location containing some data that looks right! L
 
 It looks like we've successfully found our entropy string, we can attempt to decrypt the DPAPI blob!
 
-Note: For some reason I was not able to get this working in mimikatz/sharpdpapi so I ended up using `dpapi_data_decryptor` by nirsoft found here <https://www.nirsoft.net/utils/dpapi_data_decryptor.html>
+Note: For some reason I was not able to get this working in mimikatz/sharpdpapi so I ended up using `dpapi_data_decryptor` by nirsoft found here [here](https://www.nirsoft.net/utils/dpapi_data_decryptor.html)
 
 We'll set the Decryption Mode to `Decrypt DPAPI data from current system and current user` (this only works if running in the context of that user) since these credentials are encrypted with our user DPAPI keys rather than the machine ones. We'll then ensure it's set to `Decrypt DPAPI data stored in the specified file or files` is set and point it to our `password.bin`. Finally under `Optional Entropy` we'll set it to `ANSI String Key`. Hit `OK` and...
 
