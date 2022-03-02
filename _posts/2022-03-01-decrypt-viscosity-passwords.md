@@ -77,7 +77,7 @@ AddNumbers(int num1, int num2, int num3, int num4, int num5, int num6)
 Their locations in memory would be:
 
 |----|------|
-|Name|Storage Location|
+|Name|Location|
 |num1|RCX|
 |num2|RDX|
 |num3|R8|
@@ -92,8 +92,9 @@ CryptUnprotectData(DATA_BLOB *pDataIn, LPWSTR *ppszDataDescr, DATA_BLOB *pOption
 ```
 
 So putting in in order with our above chart, their locations would look like this:
+
 |----|------|
-|Name|Storage Location|
+|Name|Location|
 |*pDataIn|RCX|
 |*ppszDataDescr|RDX|
 |*pOptionalEntropy|R8|
