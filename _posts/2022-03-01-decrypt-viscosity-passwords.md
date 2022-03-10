@@ -21,9 +21,9 @@ Note: I think it's important to show the process of how I figured it out, but if
 
 ## How it works
 
-After a quick google search, I came across this [this](https://www.sparklabs.com/forum/viewtopic.php?t=1204) forum post which identified the location for saved credentials is a file called `LoginInfo.xml` stored in `%AppData%\Viscosity\`. From here, I decided to take a look at the XML file, hoping that it would be in a format that was easily recoverable or even plaintext, the file looks like this:
+After a quick google search, I came across [this](https://www.sparklabs.com/forum/viewtopic.php?t=1204) forum post which identified the location for saved credentials is a file called `LoginInfo.xml` stored in `%AppData%\Viscosity\`. From here, I decided to take a look at the XML file, hoping that it would be in a format that was easily recoverable or even plaintext, the file looks like this:
 
----placeholderplaceholderplaceholder---
+![image](/assets/images/viscosity/logininfo.png)
 
 It turns out it's a plist containing keys for each connection with each connection containing subkeys that identify the saved Username and Password for the user. I saw Base64 encoding, however it looked too long to just be the Base64 encoded username/password. A quick decode of the string confirmed my suspicions that it wasn't going to be that easy. Before I dove too deep, I decided to look up to see if anyone had already documented password recovery for these files. Unfortunately no such tool existed, and according to [this](https://www.sparklabs.com/forum/viewtopic.php?t=2533) forum post there is no way to recover the saved credentials. Well that's no fun, so I decided to set out and see if it was actually possible to recover these credentials. 
 
@@ -127,17 +127,17 @@ Now we have access to a memory location containing some data that looks right! L
 
 It looks like we've successfully found our entropy string, we can attempt to decrypt the DPAPI blob!
 
-Note: For some reason I was not able to get this working in mimikatz/sharpdpapi so I ended up using `dpapi_data_decryptor` by nirsoft found here [here](https://www.nirsoft.net/utils/dpapi_data_decryptor.html)
+First we'll need to convert our entropy string to a hexstring to be accepted by SharpDPAPI. So our string will be `6173647764666F32206A33383035636E79747133355B307860207533327478343879206E332D397A34`
 
-We'll set the Decryption Mode to `Decrypt DPAPI data from current system and current user` (this only works if running in the context of that user) since these credentials are encrypted with our user DPAPI keys rather than the machine ones. We'll then ensure it's set to `Decrypt DPAPI data stored in the specified file or files` is set and point it to our `password.bin`. Finally under `Optional Entropy` we'll set it to `ANSI String Key`. Hit `OK` and...
+then we can enter it into our previou SharpDPAPI command using the `/entropy` flag like so:
 
-![image](/assets/images/viscosity/success.png)
+![image](/assets/images/viscosity/sharpdpapiworking.png)
 
 Victory!
 
-I confirmed that the value returned, was the same value as the password I had stored in my manager. This means we had successfully identified the entropy string. I tried this same entropy string with the other saved credentials in this file and it worked for all of them, which means that the salt is the same for each entry. However, how does the application get this value?
+I confirmed that the value returned was the same value as the password I had stored in my password manager, which also means we had successfully identified the entropy string. I tried this same entropy string with the other saved credentials in this file and it worked for all of them, which means that the salt is the same for each entry. However, how does the application get this value?
 
-I got lucky and found it pretty quickly, After running `strings.exe` on the `Viscosity.exe` executable, I did a search for the identified string and found it hardcoded into the executable!
+I decided to see if I could find the string stored in a file on my operating system. However, I ended up getting lucky and found it pretty quickly. After running `strings.exe` on the `Viscosity.exe` executable, I did a search for the entropy string and there it was!
 
 ![image](/assets/images/viscosity/strings.png)
 
