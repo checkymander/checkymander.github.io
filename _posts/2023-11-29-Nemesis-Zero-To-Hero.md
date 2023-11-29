@@ -291,4 +291,4 @@ Click `Dashboard` and you'll be brought to the main Nemesis Dashboard, which you
 
 Congratulations, you now have a basic Nemesis set up that you can begin testing against!
 
-Future posts about this I'll likely talk about using it operationally with tools that I like to use.
+Future posts about this I'll likely talk about using it operationally with my favorite red team tools.
