@@ -11,12 +11,10 @@ tags:
   - Operations
 ---
 
-## Nemesis - Zero to Hero
-
 ## What is Nemesis?
 Nemesis is an offensive data enrichment pipeline that is designed to help operators with common tasks on engagements. It can ingest structured data produced during offensive security engagements, process it, and give insights about the data including identifying vulnerabilities, credentials, and metadata about the output.
 
-According to the github it's aim is to automate a number of repetitive tasks operators encounter on engagements, empower operators analytic capabilities, and collective knowledge, and create structured and unstructed data stores of as much operational data as possible to help guide future research and facilitate offensive data analysis.
+According to the README it's aim is to automate a number of repetitive tasks operators encounter on engagements, empower operators analytic capabilities, and collective knowledge, and create structured and unstructed data stores of as much operational data as possible to help guide future research and facilitate offensive data analysis.
 
 ## Why are you writing this?
 If you take a look at the setup [instructions](https://github.com/SpecterOps/Nemesis/blob/main/docs/setup.md) it can look a bit intimidating. So I wanted to write a no-frills guide that outlines exactly what commands to run in order to get a basic Nemesis setup running. Just run the commands exactly as I outlined, and you'll have a Nemesis server you can connect to your favorite C2 platform.
@@ -110,7 +108,7 @@ nslookup google.com
 
 ![image](/assets/images/Nemesis_Setup/minikube_ssh.png)
 
-If all these work, we can move onto the next steps!
+If all these work, we can move onto the next step!
 
 ### Helm
 
@@ -122,8 +120,11 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.
 sudo apt-get update
 
 sudo apt-get install -y helm
+```
 
-# To confirm it's working
+You can confirm it's working by running the command:
+
+```
 helm list
 ```
 
@@ -163,10 +164,12 @@ You'll see an error about pyenv not being installed, don't worrry, we'll resolve
 Nemesis was coded specifically with Python 3.11 in mind, so we're going to go ahead and make sure we're using the right version. In addition, it uses PyEnv and Poetry for it's package management so we need to install those also.
 
 ```
+# Install prerquisites for pyenv
 sudo apt update; sudo apt install build-essential libssl-dev zlib1g-dev \
 		libbz2-dev libreadline-dev libsqlite3-dev curl \
 libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 
+# Install pyenv
 curl https://pyenv.run | bash
 ```
 
@@ -204,7 +207,7 @@ python3 -c 'from urllib.request import urlopen; print(urlopen("https://install.p
 ![image](/assets/images/Nemesis_Setup/poetry_install.png)
 ### Nemesis
 
-Finally, we're done with the pre-requisites, and we can get to the meat of our setup.
+Finally, we're done with the pre-requisites, and we can get to the actual Nemesis setup.
 
 First grab the Nemesis repo:
 
@@ -212,7 +215,7 @@ First grab the Nemesis repo:
 git clone https://github.com/SpecterOps/Nemesis
 ```
 
-We'll need to run one of the enrichment commands first, since Nemesis relies on it:
+We'll need to install one of the enrichment commands first, since Nemesis relies on it:
 
 ```
 cd Nemesis/
@@ -222,7 +225,7 @@ poetry -C ./cmd/enrichment/ install
 
 ![image](/assets/images/Nemesis_Setup/enrichment_install.png)
 
-Next install some pre-requisites that the nemesis-cli.py requires:
+Next install some pre-requisites that the `nemesis-cli.py` script requires:
 
 ```
 pip3 install boto3 vyper-config passlib
@@ -234,9 +237,9 @@ Next let's configure Nemesis, luckily for us it comes with an example config fil
 cp nemesis.config.example nemesis.config
 ```
 
-Edit the nemesis config with your variables, the big one is `nemesis_http_server` which you'll want to replace with the IP of the machine you're running this on.
+Edit the nemesis config, for a basic setup, you'll only need to change the `nemesis_http_server` which you'll set to use the IP of the machine you're running this on. Everything else you can keep as default if you want, or edit it to your specifications. We're going to keep it mostly default for now.
 
-Everything else you can keep as default if you want, or edit to your hearts content. When you're finished run the following command:
+When you're finished run the following command:
 
 ```
 python nemesis-cli.py --config nemesis.config
@@ -273,3 +276,19 @@ skaffold run -m nemesis --port-forward=user
 Like the documentation says, and get a fully stood up nemesis. You should see the following on your screen assuming everything set up properly.
 
 ![image](/assets/images/Nemesis_Setup/nemesis_build.png)
+
+You should now be able to log into the Nemesis interface at `http://your.ip.add.ress:8080`
+
+![image](/assets/images/Nemesis_Setup/nemesis_login.png)
+
+Enter the `Nemesis basic auth` credentials that were spit out when you ran the `nemesis-cli.py` script and you should see a pretty minimal UI.
+
+![image](/assets/images/Nemesis_Setup/nemesis_landing.png)
+
+Click `Dashboard` and you'll be brought to the main Nemesis Dashboard, which you can authenticate using the `dashboard_user` and `dashboard_password` from before.
+
+![image](/assets/images/Nemesis_Setup/dashboard_login.png)
+
+Congratulations, you now have a basic Nemesis set up that you can begin testing against!
+
+Future posts about this I'll likely talk about using it operationally with tools that I like to use.
